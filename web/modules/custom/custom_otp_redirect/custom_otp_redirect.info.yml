@@ -1,0 +1,7 @@
+name: 'Custom OTP Redirect'
+type: module
+description: 'Overrides OTP module redirection after OTP verification.'
+core_version_requirement: ^10
+package: Custom
+dependencies:
+  - otp

@@ -1,0 +1,43 @@
+<?php
+/**
+ * Implements hook_preprocess_node().
+ * Attach PWA install script dynamically based on node type.
+ */
+
+
+function dynamic_pwa_preprocess_node(array &$variables) {
+  $node = $variables['node'];
+
+  // Apply the PWA feature for all nodes of type 'digitalcards'.
+  if ($node->bundle() == 'digitalcards') {
+    // Attach custom PWA install JavaScript.
+    $variables['#attached']['library'][] = 'dynamic_pwa/install_app';
+
+    // Pass settings to indicate this is a PWA-enabled node.
+    \Drupal::service('page_cache_kill_switch')->trigger(); // Disable cache.
+    $variables['#attached']['drupalSettings']['dynamicPwa'] = [
+      'isPwaEnabledNode' => TRUE,
+      'nodeId' => $node->id(),
+      'nodeUrl' => $node->toUrl()->toString(),
+    ];
+
+    // Add the manifest link tag dynamically for each node.
+// Inside your preprocess function
+// Inside your preprocess function
+$manifest_url = '/pwa/manifest/' . $node->id();
+$variables['#attached']['html_head'][] = [
+  [
+    '#tag' => 'link',
+    '#attributes' => [
+      'rel' => 'manifest',
+      'href' => $manifest_url,
+    ],
+  ],
+  'manifest',
+];
+
+
+  }
+}
+
+

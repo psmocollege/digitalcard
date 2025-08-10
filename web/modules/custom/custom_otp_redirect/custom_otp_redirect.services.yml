@@ -1,0 +1,6 @@
+services:
+  custom_otp_redirect.otp_verify_form:
+    class: Drupal\custom_otp_redirect\Form\CustomOTPVerifyForm
+    arguments: ['@entity_type.manager', '@flood', '@user.data']
+    tags:
+      - { name: form_alter }

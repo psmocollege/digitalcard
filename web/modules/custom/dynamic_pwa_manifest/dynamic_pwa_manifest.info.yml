@@ -1,0 +1,6 @@
+name: 'Dynamic PWA Manifest'
+type: module
+description: 'Provides a dynamic manifest.json for PWA based on node URL.'
+core_version_requirement: ^10 || ^11
+dependencies:
+  - pwa:pwa

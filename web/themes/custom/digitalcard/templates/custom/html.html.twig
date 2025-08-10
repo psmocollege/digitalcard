@@ -1,0 +1,279 @@
+{#
+/**
+ * @file
+ * Theme override for the basic structure of a single Drupal page.
+ *
+ * Variables:
+ * - logged_in: A flag indicating if user is logged in.
+ * - root_path: The root path of the current page (e.g., node, admin, user).
+ * - node_type: The content type for the current node, if the page is a node.
+ * - head_title: List of text elements that make up the head_title variable.
+ *   May contain one or more of the following:
+ *   - title: The title of the page.
+ *   - name: The name of the site.
+ *   - slogan: The slogan of the site.
+ * - page_top: Initial rendered markup. This should be printed before 'page'.
+ * - page: The rendered page markup.
+ * - page_bottom: Closing rendered markup. This variable should be printed after
+ *   'page'.
+ * - db_offline: A flag indicating if the database is offline.
+ * - placeholder_token: The token for generating head, css, js and js-bottom
+ *   placeholders.
+ *
+ * @see template_preprocess_html()
+ */
+#}
+{{ attach_library('digitalcard/custom_library') }}
+{%
+  set body_classes = [
+    logged_in ? 'user-logged-in',
+    not root_path ? 'path-frontpage' : 'path-' ~ root_path|clean_class,
+    node_type ? 'page-node-type-' ~ node_type|clean_class,
+    db_offline ? 'db-offline',
+  ]
+%}
+
+<!DOCTYPE html>
+<html{{html_attributes}}>
+	<head>
+		<head-placeholder token="{{ placeholder_token }}">
+			<title>{{ head_title|safe_join(' | ') }}</title>
+			<css-placeholder token="{{ placeholder_token }}">
+				<js-placeholder token="{{ placeholder_token }}">
+					<meta charset="UTF-8">
+					<meta http-equiv="x-ua-compatible" content="ie=edge"/>
+					<meta name="viewport" content="width=device-width">
+					<link rel="preconnect" href="https://fonts.googleapis.com">
+					<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+					<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+					<noscript>
+						<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet" type="text/css"/>
+					</noscript>
+
+				</head>
+				<body{{attributes}}>
+					<div class="main-wrapper">
+						<!--header start-->
+						<!--header start-->
+							<header class="header-wrap"> <div class="container h-100">
+								<nav class="navbar navbar-expand-lg h-100">
+									<a class="navbar-brand p-0 m-0" href="#">
+										<img class="dark-mode-item navbar-brand-item img-fluid" width="140" height="44" src="/themes/custom/digitalcard/logo.png" alt="logo">
+									</a>
+									<!-- Responsive navbar toggler -->
+									<button class="navbar-toggler bar-toggler collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+										<div class="hamburger">
+											<svg class="w-burger noneblock" width="30" height="30" xmlns="http://www.w3.org/2000/svg" fill="none" viewbox="0 0 24 24" stroke="currentColor">
+												<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+											</svg>
+											<svg class="w-burger activeblock" width="30" height="30" xmlns="http://www.w3.org/2000/svg" fill="none" viewbox="0 0 24 24" stroke="currentColor">
+												<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8h16M4 16h16"></path>
+											</svg>
+										</div>
+									</button>
+									<!-- main navbar start-->
+									<div
+										class="navbar-collapse collapse h-100" id="navbarCollapse">
+										<!-- Nav main menu START -->
+										<ul class="navbar-nav ms-auto align-items-lg-center plus-font ">
+											<li class="nav-item active">
+												<a class="nav-link" href="#">Home</a>
+											</li>
+											<li class="nav-item">
+												<a class="nav-link" href="/features">Features</a>
+											</li>
+											<li class="nav-item">
+												<a class="nav-link" href="#contact">Contact Us</a>
+											</li>
+
+											{% if logged_in %}
+												{% if 'administrator' in user.roles %}
+													<li class="nav-item">
+														<a class="nav-link" href="https://digitalbusiness-card.com/dashboard/content/">Dashboard</a>
+													</li>
+												{% elseif 'digital_card_user' in user.roles %}
+													<li class="nav-item">
+														<a class="nav-link" href="https://digitalbusiness-card.com/dashboard/user">Dashboard</a>
+													</li>
+												{% elseif 'agent' in user.roles %}
+													<li class="nav-item">
+														<a class="nav-link" href="https://digitalbusiness-card.com/dashboard/agent">Dashboard</a>
+													</li>
+												{% endif %}
+												<li class="nav-item">
+													<a href="{{ path('user.logout', {'destination': '/'}) }}" class="nav-link btn btn-primary">
+														LOGOUT
+													</a>
+												</li>
+											{% else %}
+												<li class="nav-item">
+													<a href="/user/login" class="nav-link btn btn-primary">
+														LOGIN / SIGNUP
+													</a>
+												</li>
+											{% endif %}
+										</ul>
+
+
+										<!-- Nav main menu END -->
+									</div>
+								</nav>
+							</div>
+						</header>
+						<!-- End Header -->
+
+
+						<section class="lead-section spacing-100 position-relative z-1 bg-white">
+							<div class="container">
+								<div class="row g-lg-3 g-5 align-items-center justify-content-between">
+									<div class="col-md-12 col-lg-12">
+										{{ page_top }}
+										{{ page }}
+										{{ page_bottom }}
+									</div>
+
+
+								</div>
+							</div>
+						</section>
+
+
+						<!--footer-->
+						<footer>
+							<div class="footer-top position-relative z-1">
+								<div class="vectoricon position-absolute top-0 end-0 z-n1">
+									<img data-src="/themes/custom/digitalcard/assets/images/vector-home.png" alt="vector-home" class="img-fluid lazyload">
+								</div>
+								<div class="container">
+									<div class="logo-footer mb-lg-4 mb-3">
+										<a href="#">
+											<img class="img-fluid" src="/themes/custom/digitalcard/logo.png" alt="logo">
+										</a>
+									</div>
+									<div class="row g-4">
+										<div class="col-lg-4">
+											<p class="text-white fw-300 fs-16w mb-3 pe-lg-3 ">
+												Stand out from the crowd by simply using our advanced level business card. DigitalBusiness-card.com will ensure that people remember you better.
+											</p>
+											<ul class="list-inline mb-0 mt-3 social-icons">
+												<li class="list-inline-item">
+													<a target="”_blank”" class="btn-icon" href="https://www.facebook.com/businesscardigital">
+														<img data-src="/themes/custom/digitalcard/assets/images/icons/fb.png" alt="icons" class="img-fluid lazyload">
+													</a>
+												</li>
+												<li class="list-inline-item">
+													<a target="”_blank”" class="btn-icon" href="https://www.instagram.com/businesscardigital/">
+														<img data-src="/themes/custom/digitalcard/assets/images/icons/insta.png" alt="icons" class="img-fluid lazyload">
+													</a>
+												</li>
+
+
+											</ul>
+										</div>
+										<div class="col-lg-2 col-6">
+											<a href="#" class="text-white fw-300 fs-18w mb-3 d-flex">
+												Home
+											</a>
+											<a href="#" class="text-white fw-300 fs-18w mb-3 d-flex">
+												About Us
+											</a>
+											<a href="#" class="text-white fw-300 fs-18w mb-3 d-flex">
+												Features
+											</a>
+											<a href="#" class="text-white fw-300 fs-18w mb-3 d-flex">Pricing</a>
+											<a href="#contact" class="text-white fw-300 fs-18w mb-0 d-flex">Contact Us</a>
+										</div>
+										<div class="col-lg-2 col-6">
+											<a href="#" class="text-white fw-300 fs-18w mb-3 d-flex">
+												FAQs</a>
+											<a href="#" class="text-white fw-300 fs-18w mb-3 d-flex">
+												Privacy Policy
+											</a>
+											<a href="#" class="text-white fw-300 fs-18w mb-3 d-flex">
+												Terms of Service
+											</a>
+										</div>
+										<div class="col-lg-4">
+											<div id="contact" class="getintouch">
+												<p class="fw-semibold fs-20w text-white">Get In Touch</p>
+												{# <form>
+																								                      <div class="mb-3 position-relative">
+																								                        <div class="form-group position-relative">
+																								                          <input type="email" class="form-control black-form"
+																								                            placeholder="Enter your email....">
+																								                          <div class="position-absolute icon-blackf0rm">
+																								                            <img src="/themes/custom/digitalcard/assets/images/icons/email.png"
+																								                              alt="mail" class="img-fluid">
+																								                          </div>
+																								                        </div>
+																								                      </div>
+																								                      <div class="mb-3 position-relative">
+																								                        <div class="form-group position-relative">
+																								                          <textarea name="typing"
+																								                            class="form-control black-form"
+																								                            placeholder="Typing..."></textarea>
+																								                          <div class="position-absolute icon-blackf0rm">
+																								                            <img src="/themes/custom/digitalcard/assets/images/icons/edit.png" alt="mail"
+																								                              class="img-fluid">
+																								                          </div>
+																								                        </div>
+																								                      </div>
+																								                      <div class="btn-wrap mt-4">
+																								                        <button type="button"
+																								                          class="btn btn-primary text-uppercase gap-3">
+																								                          Submit
+																								                          <img data-src="/themes/custom/digitalcard/assets/images/arrowicon.png"
+																								                            alt="arrow"
+																								                            class="img-fluid lazyload"></button>
+																								                      </div>
+																								                    </form> #}
+												{{ drupal_entity('webform', 'contact') }}
+											</div>
+										</div>
+									</div>
+
+								</div>
+							</div>
+							<div class="bottom-footer pb-lg-5 pb-3">
+								<div class="container">
+									<div class="border-top-footer pt-lg-5 pt-3"></div>
+									<div class="d-flex flex-md-row flex-column justify-content-center gap-md-5 gap-3">
+										<div class="iconslist">
+											<a href="tel:33322060" class="d-inline-flex gap-3 fs-16w text-grey3 align-items-start">
+												<img src="/themes/custom/digitalcard/assets/images/icons/call.png" alt="call" class="img-fluid">
+												<span>3332 2060</span>
+											</a>,
+											<a href="tel:33981289" class="d-inline-flex gap-3 fs-16w text-grey3 align-items-start">
+												<img src="/themes/custom/digitalcard/assets/images/icons/call.png" alt="call" class="img-fluid">
+												<span>3398 1289</span>
+											</a>
+										</div>
+										<div class="iconslist">
+											<a href="#" class="d-inline-flex gap-3 fs-16w text-grey3 align-items-start">
+												<img src="/themes/custom/digitalcard/assets/images/icons/mail2.png" alt="call" class="img-fluid">
+												<span>info@digitalbusiness-card.com</span>
+											</a>
+										</div>
+										<div class="iconslist">
+											<a href="#" class="d-inline-flex gap-3 fs-16w text-grey3 align-items-start">
+												<img src="/themes/custom/digitalcard/assets/images/icons/location.png" alt="call" class="img-fluid flex-1">
+												<span>Head Office: Doha - Qatar</span>
+												|
+												<span>Branch Office: Calicut - India</span>
+											</a>
+										</div>
+									</div>
+                  	<div class="d-flex flex-md-row flex-column justify-content-center gap-md-5">
+										<a target="_blank" href="https://www.fivedesigner.com/" class="d-inline-flex gap-3 fs-16w text-grey3 align-items-start">
+											<span>Developed by Five Designer Technologies</span>
+										</a>
+
+									</div>
+								</div>
+							</div>
+						</footer>
+						<div class="border-ffoter"></div>
+					</div>
+
+					<js-bottom-placeholder token="{{ placeholder_token }}"></body>
+				</html>

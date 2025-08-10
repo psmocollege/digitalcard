@@ -1,0 +1,765 @@
+{#
+/**
+ * @file
+ * Theme override for the basic structure of a single Drupal page.
+ *
+ * Variables:
+ * - logged_in: A flag indicating if user is logged in.
+ * - root_path: The root path of the current page (e.g., node, admin, user).
+ * - node_type: The content type for the current node, if the page is a node.
+ * - head_title: List of text elements that make up the head_title variable.
+ *   May contain one or more of the following:
+ *   - title: The title of the page.
+ *   - name: The name of the site.
+ *   - slogan: The slogan of the site.
+ * - page_top: Initial rendered markup. This should be printed before 'page'.
+ * - page: The rendered page markup.
+ * - page_bottom: Closing rendered markup. This variable should be printed after
+ *   'page'.
+ * - db_offline: A flag indicating if the database is offline.
+ * - placeholder_token: The token for generating head, css, js and js-bottom
+ *   placeholders.
+ *
+ * @see template_preprocess_html()
+ */
+#}
+{{ attach_library('digitalcard/custom_library') }}
+{%
+  set body_classes = [
+    logged_in ? 'user-logged-in',
+    not root_path ? 'path-frontpage' : 'path-' ~ root_path|clean_class,
+    node_type ? 'page-node-type-' ~ node_type|clean_class,
+    db_offline ? 'db-offline',
+  ]
+%}
+
+<!DOCTYPE html>
+<html{{html_attributes}}>
+	<head>
+		<head-placeholder token="{{ placeholder_token }}">
+			<title>{{ head_title|safe_join(' | ') }}</title>
+			<css-placeholder token="{{ placeholder_token }}">
+				<js-placeholder token="{{ placeholder_token }}">
+					<meta charset="UTF-8">
+					<meta http-equiv="x-ua-compatible" content="ie=edge"/>
+					<meta name="viewport" content="width=device-width">
+					<link rel="preconnect" href="https://fonts.googleapis.com">
+					<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+					<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+					<noscript>
+						<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet" type="text/css"/>
+					</noscript>
+
+				</head>
+				<body{{attributes}}>
+					<div class="main-wrapper">
+						<!--header start-->
+						<!--header start-->
+							<header class="header-wrap"> <div class="container h-100">
+								<nav class="navbar navbar-expand-lg h-100">
+									<a class="navbar-brand p-0 m-0" href="#">
+										<img class="dark-mode-item navbar-brand-item img-fluid" width="140" height="44" src="/themes/custom/digitalcard/logo.png" alt="logo">
+									</a>
+									<!-- Responsive navbar toggler -->
+									<button class="navbar-toggler bar-toggler collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+										<div class="hamburger">
+											<svg class="w-burger noneblock" width="30" height="30" xmlns="http://www.w3.org/2000/svg" fill="none" viewbox="0 0 24 24" stroke="currentColor">
+												<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+											</svg>
+											<svg class="w-burger activeblock" width="30" height="30" xmlns="http://www.w3.org/2000/svg" fill="none" viewbox="0 0 24 24" stroke="currentColor">
+												<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8h16M4 16h16"></path>
+											</svg>
+										</div>
+									</button>
+									<!-- main navbar start-->
+									<div
+										class="navbar-collapse collapse h-100" id="navbarCollapse">
+										<!-- Nav main menu START -->
+										<ul class="navbar-nav ms-auto align-items-lg-center plus-font ">
+											<li class="nav-item active">
+												<a class="nav-link" href="https://digitalbusiness-card.com/">Home</a>
+											</li>
+											<li class="nav-item">
+												<a class="nav-link" href="/features">Features</a>
+											</li>
+											<li class="nav-item">
+												<a class="nav-link" href="#contact">Contact Us</a>
+											</li>
+
+											{% if logged_in %}
+												{% if 'administrator' in user.roles %}
+													<li class="nav-item">
+														<a class="nav-link" href="https://digitalbusiness-card.com/dashboard/content/">Dashboard</a>
+													</li>
+												{% elseif 'digital_card_user' in user.roles %}
+													<li class="nav-item">
+														<a class="nav-link" href="https://digitalbusiness-card.com/dashboard/user">Dashboard</a>
+													</li>
+												{% elseif 'agent' in user.roles %}
+													<li class="nav-item">
+														<a class="nav-link" href="https://digitalbusiness-card.com/dashboard/agent">Dashboard</a>
+													</li>
+												{% endif %}
+												<li class="nav-item">
+													<a href="{{ path('user.logout', {'destination': '/'}) }}" class="nav-link btn btn-primary">
+														LOGOUT
+													</a>
+												</li>
+											{% else %}
+												<li class="nav-item">
+													<a href="/user/login" class="nav-link btn btn-primary">
+														LOGIN / SIGNUP
+													</a>
+												</li>
+											{% endif %}
+										</ul>
+
+
+										<!-- Nav main menu END -->
+									</div>
+								</nav>
+							</div>
+						</header>
+						<!-- End Header -->
+
+						<div class="herobanner spacing-150 bg-black position-relative z-1">
+							<div class="vectoricon position-absolute top-0 end-0 z-n1">
+								<img data-src="/themes/custom/digitalcard/assets/images/vector-home.png" alt="vector-home" class="img-fluid lazyload">
+							</div>
+							<div class="container">
+								<div class="row align-items-center justify-content-center text-center g-lg-4 g-5">
+									<div class="col-lg-6 ">
+										<div class="hero-content  text-center">
+											<h1 class="fs-100w text-white fw-bold lh-3 mb-3">Endless
+												<span class="fw-bold primary-color">Features</span>
+											</h1>
+											<p class="fw-500 fs-20w text-grey">Explore the Future of
+												                  Networking - Enhanced, Efficient, and Engaging.</p>
+											<div class="buttonwdgap d-md-inline-flex d-grid row-gap-3 mt-lg-4 gap-3">
+												{% if logged_in %}
+													<a href="/node/add/digitalcards" class="btn btn-primary text-uppercase gap-3">
+														Create your OWN card
+														<img data-src="/themes/custom/digitalcard/assets/images/arrowicon.png" alt="arrow" class="img-fluid lazyload">
+													</a>
+												{% else %}
+													<a href="/user/login" class="btn btn-primary text-uppercase gap-3">
+														Create your OWN card
+														<img data-src="/themes/custom/digitalcard/assets/images/arrowicon.png" alt="arrow" class="img-fluid lazyload">
+													</a>
+												{% endif %}
+											</div>
+										</div>
+									</div>
+
+								</div>
+							</div>
+						</div>
+
+						<section class="lead-section spacing-100 position-relative z-1 bg-white">
+							<div class="container">
+								<div class="row g-lg-3 g-5 align-items-center justify-content-between">
+									<div class="col-md-6 col-lg-4">
+										<div class="fs-50w fw-200  mb-3">
+											<span class="fw-bold">Lead
+											</span><br>
+											Generation</div>
+										<p class="fw-300 text-grey2  fs-20w opacity-50 mb-lg-4">Transform
+											                Networking into Opportunities Our digital business cards are
+											                designed to maximize your lead generation efforts using:</p>
+										<ul class="text-grey3 fs-20w tickionli d-flex flex-column row-gap-3">
+											<li>Contact Form Integration</li>
+											<li>WhatsApp and Messaging Integration</li>
+											<li>Direct Call and Email Buttons</li>
+											<li>QR Code Feature</li>
+											<li>Unlimitted Sharing</li>
+											<li>Direct access to your website</li>
+										</ul>
+										<div class="mt-lg-5 mt-3 buttonwdgap d-md-inline-flex d-grid row-gap-3">
+											{% if logged_in %}
+												<a href="/node/add/digitalcards" class="btn btn-primary text-uppercase gap-3">
+													Create your OWN card
+													<img data-src="/themes/custom/digitalcard/assets/images/arrowicon.png" alt="arrow" class="img-fluid lazyload">
+												</a>
+											{% else %}
+												<a href="/user/login" class="btn btn-primary text-uppercase gap-3">
+													Create your OWN card
+													<img data-src="/themes/custom/digitalcard/assets/images/arrowicon.png" alt="arrow" class="img-fluid lazyload">
+												</a>
+											{% endif %}
+										</div>
+									</div>
+
+									<div class="col-md-6 position-relative ">
+										<div class="roap-feature position-absolute top-0 z-n1 bottom-0 h-100 d-lg-block d-none">
+											<img data-src="/themes/custom/digitalcard/assets/images/feature/roap.png" alt="people" class="img-fluid lazyload">
+										</div>
+										<div class="feature-lead">
+											<img data-src="/themes/custom/digitalcard/assets/images/feature/feature-lead.png" alt="feature-lead" class="img-fluid lazyload">
+										</div>
+									</div>
+								</div>
+							</div>
+						</section>
+
+						<section class="bg-black spacing-100 unique-feat position-relative z-1 pb-0">
+							<div class="container">
+								<div class="mx-auto w-md-90">
+									<div class="d-flex gap-4 flex-wrap justify-content-center align-items-center mb-4">
+										<img data-src="/themes/custom/digitalcard/assets/images/feature/unique.png" alt="feature" class="img-fluid lazyload uniqueimag">
+
+										<div class="fs-50w fw-200 text-white ">
+											<span class="fw-bold">Unique
+											</span>
+											Features
+										</div>
+									</div>
+
+									<div class="d-flex gap-4 flex-wrap justify-content-center align-items-center mb-3">
+										<div class="fs-50w fw-200 text-white ">
+											<span class="fw-bold">For Your
+											</span>
+											Business
+										</div>
+										<div class="buttonwdgap d-md-inline-flex d-grid row-gap-3">
+											{% if logged_in %}
+												<a href="/node/add/digitalcards" class="btn btn-primary text-uppercase gap-3">
+													Create your OWN card
+													<img data-src="/themes/custom/digitalcard/assets/images/arrowicon.png" alt="arrow" class="img-fluid lazyload">
+												</a>
+											{% else %}
+												<a href="/user/login" class="btn btn-primary text-uppercase gap-3">
+													Create your OWN card
+													<img data-src="/themes/custom/digitalcard/assets/images/arrowicon.png" alt="arrow" class="img-fluid lazyload">
+												</a>
+											{% endif %}
+										</div>
+
+									</div>
+
+								</div>
+
+								<div class="spacing-50"></div>
+								<div class="cards-businesss ">
+									<div class="row g-lg-0 g-4">
+										<div class="col-md-6 col-lg-3">
+											<div class="card-wrap-feature h-100 d-flex flex-column">
+												<h3 class="fs-40w fw-500 text-white mb-lg-4 mb-3">Contact
+													<br class="d-lg-block d-none">Information</h3>
+												<p class="text-grey fw-500 mb-lg-5 mb-4 fs-20w flex-1">Name,
+													                    Email, Phone Number, Address, and other relvent details.</p>
+
+												<a class="arrow-bottom" href="#">
+
+													<svg width="25" height="24" viewbox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+														<circle cx="12.5625" cy="12" r="12" fill="#2C2C2C"/>
+														<path d="M12.9547 7.77281C12.896 7.83134 12.8494 7.90088 12.8176 7.97746C12.7858 8.05404 12.7694 8.13614 12.7694 8.21906C12.7694 8.30198 12.7858 8.38408 12.8176 8.46065C12.8494 8.53723 12.896 8.60678 12.9547 8.66531L15.6579 11.3685L7.94042 11.3685C7.77334 11.3685 7.61309 11.4349 7.49495 11.5531C7.3768 11.6712 7.31042 11.8314 7.31042 11.9985C7.31042 12.1656 7.3768 12.3259 7.49495 12.444C7.61309 12.5622 7.77334 12.6285 7.94042 12.6285L15.6579 12.6285L12.9547 15.3328C12.8363 15.4512 12.7699 15.6117 12.7699 15.7791C12.7699 15.9464 12.8363 16.107 12.9547 16.2253C13.0731 16.3437 13.2336 16.4102 13.401 16.4102C13.5683 16.4102 13.7288 16.3437 13.8472 16.2253L17.6272 12.4453C17.6859 12.3868 17.7325 12.3172 17.7643 12.2407C17.7961 12.1641 17.8125 12.082 17.8125 11.9991C17.8125 11.9161 17.7961 11.834 17.7643 11.7575C17.7325 11.6809 17.6859 11.6113 17.6272 11.5528L13.8472 7.77281C13.7887 7.71408 13.7191 7.66747 13.6425 7.63568C13.566 7.60388 13.4839 7.58751 13.401 7.58751C13.318 7.58751 13.2359 7.60388 13.1594 7.63568C13.0828 7.66747 13.0132 7.71408 12.9547 7.77281Z" fill="black"/>
+													</svg>
+
+												</a>
+
+											</div>
+										</div>
+										<div class="col-md-6 col-lg-3">
+											<div class="card-wrap-feature h-100 d-flex flex-column">
+												<h3 class="fs-40w fw-500 text-white mb-lg-4 mb-3 flex-1">Professional
+													<br class="d-lg-block d-none">Profile</h3>
+												<p class="text-grey fw-500 mb-lg-5 mb-4 fs-20w flex-1">Brief bio, work experience, skills, and achievements.</p>
+												<a class="arrow-bottom" href="#">
+
+													<svg width="25" height="24" viewbox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+														<circle cx="12.5625" cy="12" r="12" fill="#2C2C2C"/>
+														<path d="M12.9547 7.77281C12.896 7.83134 12.8494 7.90088 12.8176 7.97746C12.7858 8.05404 12.7694 8.13614 12.7694 8.21906C12.7694 8.30198 12.7858 8.38408 12.8176 8.46065C12.8494 8.53723 12.896 8.60678 12.9547 8.66531L15.6579 11.3685L7.94042 11.3685C7.77334 11.3685 7.61309 11.4349 7.49495 11.5531C7.3768 11.6712 7.31042 11.8314 7.31042 11.9985C7.31042 12.1656 7.3768 12.3259 7.49495 12.444C7.61309 12.5622 7.77334 12.6285 7.94042 12.6285L15.6579 12.6285L12.9547 15.3328C12.8363 15.4512 12.7699 15.6117 12.7699 15.7791C12.7699 15.9464 12.8363 16.107 12.9547 16.2253C13.0731 16.3437 13.2336 16.4102 13.401 16.4102C13.5683 16.4102 13.7288 16.3437 13.8472 16.2253L17.6272 12.4453C17.6859 12.3868 17.7325 12.3172 17.7643 12.2407C17.7961 12.1641 17.8125 12.082 17.8125 11.9991C17.8125 11.9161 17.7961 11.834 17.7643 11.7575C17.7325 11.6809 17.6859 11.6113 17.6272 11.5528L13.8472 7.77281C13.7887 7.71408 13.7191 7.66747 13.6425 7.63568C13.566 7.60388 13.4839 7.58751 13.401 7.58751C13.318 7.58751 13.2359 7.60388 13.1594 7.63568C13.0828 7.66747 13.0132 7.71408 12.9547 7.77281Z" fill="black"/>
+													</svg>
+
+												</a>
+											</div>
+										</div>
+										<div class="col-md-6 col-lg-3">
+											<div class="card-wrap-feature h-100 d-flex flex-column">
+												<h3 class="fs-40w fw-500 text-white mb-lg-4 mb-3 flex-1">Social Media
+													<br class="d-lg-block d-none">Links</h3>
+												<p class="text-grey fw-500 mb-lg-5 mb-4 fs-20w flex-1">Links to LinkedIn, Twitter, Facebook, and other social
+													media profiles.</p>
+												<a class="arrow-bottom" href="#">
+
+													<svg width="25" height="24" viewbox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+														<circle cx="12.5625" cy="12" r="12" fill="#2C2C2C"/>
+														<path d="M12.9547 7.77281C12.896 7.83134 12.8494 7.90088 12.8176 7.97746C12.7858 8.05404 12.7694 8.13614 12.7694 8.21906C12.7694 8.30198 12.7858 8.38408 12.8176 8.46065C12.8494 8.53723 12.896 8.60678 12.9547 8.66531L15.6579 11.3685L7.94042 11.3685C7.77334 11.3685 7.61309 11.4349 7.49495 11.5531C7.3768 11.6712 7.31042 11.8314 7.31042 11.9985C7.31042 12.1656 7.3768 12.3259 7.49495 12.444C7.61309 12.5622 7.77334 12.6285 7.94042 12.6285L15.6579 12.6285L12.9547 15.3328C12.8363 15.4512 12.7699 15.6117 12.7699 15.7791C12.7699 15.9464 12.8363 16.107 12.9547 16.2253C13.0731 16.3437 13.2336 16.4102 13.401 16.4102C13.5683 16.4102 13.7288 16.3437 13.8472 16.2253L17.6272 12.4453C17.6859 12.3868 17.7325 12.3172 17.7643 12.2407C17.7961 12.1641 17.8125 12.082 17.8125 11.9991C17.8125 11.9161 17.7961 11.834 17.7643 11.7575C17.7325 11.6809 17.6859 11.6113 17.6272 11.5528L13.8472 7.77281C13.7887 7.71408 13.7191 7.66747 13.6425 7.63568C13.566 7.60388 13.4839 7.58751 13.401 7.58751C13.318 7.58751 13.2359 7.60388 13.1594 7.63568C13.0828 7.66747 13.0132 7.71408 12.9547 7.77281Z" fill="black"/>
+													</svg>
+
+												</a>
+											</div>
+										</div>
+										<div class="col-md-6 col-lg-3">
+											<div class="card-wrap-feature h-100 d-flex flex-column">
+												<h3 class="fs-40w fw-500 text-white mb-lg-4 mb-3 flex-1">Direct
+													<br class="d-lg-block d-none">Whatsapp Button</h3>
+												<p class="text-grey fw-500 mb-lg-5 mb-4 fs-20w flex-1">A direct WhatsApp button allows others to instantly
+													initiate a conversation with you on WhatsApp.</p>
+												<a class="arrow-bottom" href="#">
+
+													<svg width="25" height="24" viewbox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+														<circle cx="12.5625" cy="12" r="12" fill="#2C2C2C"/>
+														<path d="M12.9547 7.77281C12.896 7.83134 12.8494 7.90088 12.8176 7.97746C12.7858 8.05404 12.7694 8.13614 12.7694 8.21906C12.7694 8.30198 12.7858 8.38408 12.8176 8.46065C12.8494 8.53723 12.896 8.60678 12.9547 8.66531L15.6579 11.3685L7.94042 11.3685C7.77334 11.3685 7.61309 11.4349 7.49495 11.5531C7.3768 11.6712 7.31042 11.8314 7.31042 11.9985C7.31042 12.1656 7.3768 12.3259 7.49495 12.444C7.61309 12.5622 7.77334 12.6285 7.94042 12.6285L15.6579 12.6285L12.9547 15.3328C12.8363 15.4512 12.7699 15.6117 12.7699 15.7791C12.7699 15.9464 12.8363 16.107 12.9547 16.2253C13.0731 16.3437 13.2336 16.4102 13.401 16.4102C13.5683 16.4102 13.7288 16.3437 13.8472 16.2253L17.6272 12.4453C17.6859 12.3868 17.7325 12.3172 17.7643 12.2407C17.7961 12.1641 17.8125 12.082 17.8125 11.9991C17.8125 11.9161 17.7961 11.834 17.7643 11.7575C17.7325 11.6809 17.6859 11.6113 17.6272 11.5528L13.8472 7.77281C13.7887 7.71408 13.7191 7.66747 13.6425 7.63568C13.566 7.60388 13.4839 7.58751 13.401 7.58751C13.318 7.58751 13.2359 7.60388 13.1594 7.63568C13.0828 7.66747 13.0132 7.71408 12.9547 7.77281Z" fill="black"/>
+													</svg>
+
+												</a>
+											</div>
+										</div>
+									</div>
+									<div class="row g-lg-0 g-4">
+										<div class="col-md-6 col-lg-3">
+											<div class="card-wrap-feature h-100 d-flex flex-column">
+												<h3 class="fs-40w fw-500 text-white mb-lg-4 mb-3 flex-1">QR Code
+												</h3>
+												<p class="text-grey fw-500 mb-lg-5 mb-4 fs-20w flex-1">A scannable code that directs to a website, email, or phone number.</p>
+												<a class="arrow-bottom" href="#">
+
+													<svg width="25" height="24" viewbox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+														<circle cx="12.5625" cy="12" r="12" fill="#2C2C2C"/>
+														<path d="M12.9547 7.77281C12.896 7.83134 12.8494 7.90088 12.8176 7.97746C12.7858 8.05404 12.7694 8.13614 12.7694 8.21906C12.7694 8.30198 12.7858 8.38408 12.8176 8.46065C12.8494 8.53723 12.896 8.60678 12.9547 8.66531L15.6579 11.3685L7.94042 11.3685C7.77334 11.3685 7.61309 11.4349 7.49495 11.5531C7.3768 11.6712 7.31042 11.8314 7.31042 11.9985C7.31042 12.1656 7.3768 12.3259 7.49495 12.444C7.61309 12.5622 7.77334 12.6285 7.94042 12.6285L15.6579 12.6285L12.9547 15.3328C12.8363 15.4512 12.7699 15.6117 12.7699 15.7791C12.7699 15.9464 12.8363 16.107 12.9547 16.2253C13.0731 16.3437 13.2336 16.4102 13.401 16.4102C13.5683 16.4102 13.7288 16.3437 13.8472 16.2253L17.6272 12.4453C17.6859 12.3868 17.7325 12.3172 17.7643 12.2407C17.7961 12.1641 17.8125 12.082 17.8125 11.9991C17.8125 11.9161 17.7961 11.834 17.7643 11.7575C17.7325 11.6809 17.6859 11.6113 17.6272 11.5528L13.8472 7.77281C13.7887 7.71408 13.7191 7.66747 13.6425 7.63568C13.566 7.60388 13.4839 7.58751 13.401 7.58751C13.318 7.58751 13.2359 7.60388 13.1594 7.63568C13.0828 7.66747 13.0132 7.71408 12.9547 7.77281Z" fill="black"/>
+													</svg>
+
+												</a>
+											</div>
+										</div>
+										<div class="col-md-6 col-lg-3">
+											<div class="card-wrap-feature h-100 d-flex flex-column">
+												<h3 class="fs-40w fw-500 text-white mb-lg-4 mb-3 flex-1">Mobile
+													<br class="d-lg-block d-none">
+													Responsive:</h3>
+												<p class="text-grey fw-500 mb-lg-5 mb-4 fs-20w flex-1">A mobile-responsive design ensures your business card
+													look great and function perfectly on any device, from desktop to mobile, with a
+													seamless and adaptive layout.</p>
+												<a class="arrow-bottom" href="#">
+
+													<svg width="25" height="24" viewbox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+														<circle cx="12.5625" cy="12" r="12" fill="#2C2C2C"/>
+														<path d="M12.9547 7.77281C12.896 7.83134 12.8494 7.90088 12.8176 7.97746C12.7858 8.05404 12.7694 8.13614 12.7694 8.21906C12.7694 8.30198 12.7858 8.38408 12.8176 8.46065C12.8494 8.53723 12.896 8.60678 12.9547 8.66531L15.6579 11.3685L7.94042 11.3685C7.77334 11.3685 7.61309 11.4349 7.49495 11.5531C7.3768 11.6712 7.31042 11.8314 7.31042 11.9985C7.31042 12.1656 7.3768 12.3259 7.49495 12.444C7.61309 12.5622 7.77334 12.6285 7.94042 12.6285L15.6579 12.6285L12.9547 15.3328C12.8363 15.4512 12.7699 15.6117 12.7699 15.7791C12.7699 15.9464 12.8363 16.107 12.9547 16.2253C13.0731 16.3437 13.2336 16.4102 13.401 16.4102C13.5683 16.4102 13.7288 16.3437 13.8472 16.2253L17.6272 12.4453C17.6859 12.3868 17.7325 12.3172 17.7643 12.2407C17.7961 12.1641 17.8125 12.082 17.8125 11.9991C17.8125 11.9161 17.7961 11.834 17.7643 11.7575C17.7325 11.6809 17.6859 11.6113 17.6272 11.5528L13.8472 7.77281C13.7887 7.71408 13.7191 7.66747 13.6425 7.63568C13.566 7.60388 13.4839 7.58751 13.401 7.58751C13.318 7.58751 13.2359 7.60388 13.1594 7.63568C13.0828 7.66747 13.0132 7.71408 12.9547 7.77281Z" fill="black"/>
+													</svg>
+
+												</a>
+											</div>
+										</div>
+										<div class="col-md-6 col-lg-3">
+											<div class="card-wrap-feature h-100 d-flex flex-column">
+												<h3 class="fs-40w fw-500 text-white mb-lg-4 mb-3 flex-1">Calendly
+													<br class="d-lg-block d-none">
+													Integration:</h3>
+												<p class="text-grey fw-500 mb-lg-5 mb-4 fs-20w flex-1">Schedule meetings effortlessly with Calendly integration,
+													saving time and enhancing professionalism.</p>
+												<a class="arrow-bottom" href="#">
+
+													<svg width="25" height="24" viewbox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+														<circle cx="12.5625" cy="12" r="12" fill="#2C2C2C"/>
+														<path d="M12.9547 7.77281C12.896 7.83134 12.8494 7.90088 12.8176 7.97746C12.7858 8.05404 12.7694 8.13614 12.7694 8.21906C12.7694 8.30198 12.7858 8.38408 12.8176 8.46065C12.8494 8.53723 12.896 8.60678 12.9547 8.66531L15.6579 11.3685L7.94042 11.3685C7.77334 11.3685 7.61309 11.4349 7.49495 11.5531C7.3768 11.6712 7.31042 11.8314 7.31042 11.9985C7.31042 12.1656 7.3768 12.3259 7.49495 12.444C7.61309 12.5622 7.77334 12.6285 7.94042 12.6285L15.6579 12.6285L12.9547 15.3328C12.8363 15.4512 12.7699 15.6117 12.7699 15.7791C12.7699 15.9464 12.8363 16.107 12.9547 16.2253C13.0731 16.3437 13.2336 16.4102 13.401 16.4102C13.5683 16.4102 13.7288 16.3437 13.8472 16.2253L17.6272 12.4453C17.6859 12.3868 17.7325 12.3172 17.7643 12.2407C17.7961 12.1641 17.8125 12.082 17.8125 11.9991C17.8125 11.9161 17.7961 11.834 17.7643 11.7575C17.7325 11.6809 17.6859 11.6113 17.6272 11.5528L13.8472 7.77281C13.7887 7.71408 13.7191 7.66747 13.6425 7.63568C13.566 7.60388 13.4839 7.58751 13.401 7.58751C13.318 7.58751 13.2359 7.60388 13.1594 7.63568C13.0828 7.66747 13.0132 7.71408 12.9547 7.77281Z" fill="black"/>
+													</svg>
+
+												</a>
+											</div>
+										</div>
+										<div class="col-md-6 col-lg-3">
+											<div class="card-wrap-feature h-100 d-flex flex-column">
+												<h3 class="fs-40w fw-500 text-white mb-lg-4 mb-3 flex-1">Email
+													<br class="d-lg-block d-none">signature</h3>
+												<p class="text-grey fw-500 mb-lg-5 mb-4 fs-20w flex-1">generates a professional email signature matching your card
+													design, including contact info, social links, and Calendly integration, and allows
+													recipients to save your details with one click.</p>
+												<a class="arrow-bottom" href="#">
+
+													<svg width="25" height="24" viewbox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+														<circle cx="12.5625" cy="12" r="12" fill="#2C2C2C"/>
+														<path d="M12.9547 7.77281C12.896 7.83134 12.8494 7.90088 12.8176 7.97746C12.7858 8.05404 12.7694 8.13614 12.7694 8.21906C12.7694 8.30198 12.7858 8.38408 12.8176 8.46065C12.8494 8.53723 12.896 8.60678 12.9547 8.66531L15.6579 11.3685L7.94042 11.3685C7.77334 11.3685 7.61309 11.4349 7.49495 11.5531C7.3768 11.6712 7.31042 11.8314 7.31042 11.9985C7.31042 12.1656 7.3768 12.3259 7.49495 12.444C7.61309 12.5622 7.77334 12.6285 7.94042 12.6285L15.6579 12.6285L12.9547 15.3328C12.8363 15.4512 12.7699 15.6117 12.7699 15.7791C12.7699 15.9464 12.8363 16.107 12.9547 16.2253C13.0731 16.3437 13.2336 16.4102 13.401 16.4102C13.5683 16.4102 13.7288 16.3437 13.8472 16.2253L17.6272 12.4453C17.6859 12.3868 17.7325 12.3172 17.7643 12.2407C17.7961 12.1641 17.8125 12.082 17.8125 11.9991C17.8125 11.9161 17.7961 11.834 17.7643 11.7575C17.7325 11.6809 17.6859 11.6113 17.6272 11.5528L13.8472 7.77281C13.7887 7.71408 13.7191 7.66747 13.6425 7.63568C13.566 7.60388 13.4839 7.58751 13.401 7.58751C13.318 7.58751 13.2359 7.60388 13.1594 7.63568C13.0828 7.66747 13.0132 7.71408 12.9547 7.77281Z" fill="black"/>
+													</svg>
+
+												</a>
+											</div>
+										</div>
+									</div>
+									<div class="row g-lg-0 g-4">
+										<div class="col-md-6 col-lg-3">
+											<div class="card-wrap-feature h-100 d-flex flex-column">
+												<h3 class="fs-40w fw-500 text-white mb-lg-4 mb-3 flex-1">Analytics
+												</h3>
+												<p class="text-grey fw-500 mb-lg-5 mb-4 fs-20w flex-1">Tracking of views, clicks, and shares to measure the card's
+													effectiveness.</p>
+												<a class="arrow-bottom" href="#">
+
+													<svg width="25" height="24" viewbox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+														<circle cx="12.5625" cy="12" r="12" fill="#2C2C2C"/>
+														<path d="M12.9547 7.77281C12.896 7.83134 12.8494 7.90088 12.8176 7.97746C12.7858 8.05404 12.7694 8.13614 12.7694 8.21906C12.7694 8.30198 12.7858 8.38408 12.8176 8.46065C12.8494 8.53723 12.896 8.60678 12.9547 8.66531L15.6579 11.3685L7.94042 11.3685C7.77334 11.3685 7.61309 11.4349 7.49495 11.5531C7.3768 11.6712 7.31042 11.8314 7.31042 11.9985C7.31042 12.1656 7.3768 12.3259 7.49495 12.444C7.61309 12.5622 7.77334 12.6285 7.94042 12.6285L15.6579 12.6285L12.9547 15.3328C12.8363 15.4512 12.7699 15.6117 12.7699 15.7791C12.7699 15.9464 12.8363 16.107 12.9547 16.2253C13.0731 16.3437 13.2336 16.4102 13.401 16.4102C13.5683 16.4102 13.7288 16.3437 13.8472 16.2253L17.6272 12.4453C17.6859 12.3868 17.7325 12.3172 17.7643 12.2407C17.7961 12.1641 17.8125 12.082 17.8125 11.9991C17.8125 11.9161 17.7961 11.834 17.7643 11.7575C17.7325 11.6809 17.6859 11.6113 17.6272 11.5528L13.8472 7.77281C13.7887 7.71408 13.7191 7.66747 13.6425 7.63568C13.566 7.60388 13.4839 7.58751 13.401 7.58751C13.318 7.58751 13.2359 7.60388 13.1594 7.63568C13.0828 7.66747 13.0132 7.71408 12.9547 7.77281Z" fill="black"/>
+													</svg>
+
+												</a>
+											</div>
+										</div>
+										<div class="col-md-6 col-lg-3">
+											<div class="card-wrap-feature h-100 d-flex flex-column">
+												<h3 class="fs-40w fw-500 text-white mb-lg-4 mb-3 flex-1">Updates
+												</h3>
+												<p class="text-grey fw-500 mb-lg-5 mb-4 fs-20w flex-1">Ability to easily update and refresh the card's content.</p>
+												<a class="arrow-bottom" href="#">
+
+													<svg width="25" height="24" viewbox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+														<circle cx="12.5625" cy="12" r="12" fill="#2C2C2C"/>
+														<path d="M12.9547 7.77281C12.896 7.83134 12.8494 7.90088 12.8176 7.97746C12.7858 8.05404 12.7694 8.13614 12.7694 8.21906C12.7694 8.30198 12.7858 8.38408 12.8176 8.46065C12.8494 8.53723 12.896 8.60678 12.9547 8.66531L15.6579 11.3685L7.94042 11.3685C7.77334 11.3685 7.61309 11.4349 7.49495 11.5531C7.3768 11.6712 7.31042 11.8314 7.31042 11.9985C7.31042 12.1656 7.3768 12.3259 7.49495 12.444C7.61309 12.5622 7.77334 12.6285 7.94042 12.6285L15.6579 12.6285L12.9547 15.3328C12.8363 15.4512 12.7699 15.6117 12.7699 15.7791C12.7699 15.9464 12.8363 16.107 12.9547 16.2253C13.0731 16.3437 13.2336 16.4102 13.401 16.4102C13.5683 16.4102 13.7288 16.3437 13.8472 16.2253L17.6272 12.4453C17.6859 12.3868 17.7325 12.3172 17.7643 12.2407C17.7961 12.1641 17.8125 12.082 17.8125 11.9991C17.8125 11.9161 17.7961 11.834 17.7643 11.7575C17.7325 11.6809 17.6859 11.6113 17.6272 11.5528L13.8472 7.77281C13.7887 7.71408 13.7191 7.66747 13.6425 7.63568C13.566 7.60388 13.4839 7.58751 13.401 7.58751C13.318 7.58751 13.2359 7.60388 13.1594 7.63568C13.0828 7.66747 13.0132 7.71408 12.9547 7.77281Z" fill="black"/>
+													</svg>
+
+												</a>
+											</div>
+										</div>
+										<div class="col-md-6 col-lg-3">
+											<div class="card-wrap-feature h-100 d-flex flex-column">
+												<h3 class="fs-40w fw-500 text-white mb-lg-4 mb-3 flex-1">Sharing
+												</h3>
+												<p class="text-grey fw-500 mb-lg-5 mb-4 fs-20w flex-1">Options to share the card via email, SMS, or social media.</p>
+												<a class="arrow-bottom" href="#">
+
+													<svg width="25" height="24" viewbox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+														<circle cx="12.5625" cy="12" r="12" fill="#2C2C2C"/>
+														<path d="M12.9547 7.77281C12.896 7.83134 12.8494 7.90088 12.8176 7.97746C12.7858 8.05404 12.7694 8.13614 12.7694 8.21906C12.7694 8.30198 12.7858 8.38408 12.8176 8.46065C12.8494 8.53723 12.896 8.60678 12.9547 8.66531L15.6579 11.3685L7.94042 11.3685C7.77334 11.3685 7.61309 11.4349 7.49495 11.5531C7.3768 11.6712 7.31042 11.8314 7.31042 11.9985C7.31042 12.1656 7.3768 12.3259 7.49495 12.444C7.61309 12.5622 7.77334 12.6285 7.94042 12.6285L15.6579 12.6285L12.9547 15.3328C12.8363 15.4512 12.7699 15.6117 12.7699 15.7791C12.7699 15.9464 12.8363 16.107 12.9547 16.2253C13.0731 16.3437 13.2336 16.4102 13.401 16.4102C13.5683 16.4102 13.7288 16.3437 13.8472 16.2253L17.6272 12.4453C17.6859 12.3868 17.7325 12.3172 17.7643 12.2407C17.7961 12.1641 17.8125 12.082 17.8125 11.9991C17.8125 11.9161 17.7961 11.834 17.7643 11.7575C17.7325 11.6809 17.6859 11.6113 17.6272 11.5528L13.8472 7.77281C13.7887 7.71408 13.7191 7.66747 13.6425 7.63568C13.566 7.60388 13.4839 7.58751 13.401 7.58751C13.318 7.58751 13.2359 7.60388 13.1594 7.63568C13.0828 7.66747 13.0132 7.71408 12.9547 7.77281Z" fill="black"/>
+													</svg>
+
+												</a>
+											</div>
+										</div>
+										<div class="col-md-6 col-lg-3">
+											<div class="card-wrap-feature h-100 d-flex flex-column">
+												<h3 class="fs-40w fw-500 text-white mb-lg-4 mb-3 flex-1">Unlimited Card
+													<br class="d-lg-block d-none">Sharing</h3>
+												<p class="text-grey fw-500 mb-lg-5 mb-4 fs-20w flex-1">Allows you to share your digital business card with an
+													unlimited number of people, without any restrictions or limitations.</p>
+												<a class="arrow-bottom" href="#">
+
+													<svg width="25" height="24" viewbox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+														<circle cx="12.5625" cy="12" r="12" fill="#2C2C2C"/>
+														<path d="M12.9547 7.77281C12.896 7.83134 12.8494 7.90088 12.8176 7.97746C12.7858 8.05404 12.7694 8.13614 12.7694 8.21906C12.7694 8.30198 12.7858 8.38408 12.8176 8.46065C12.8494 8.53723 12.896 8.60678 12.9547 8.66531L15.6579 11.3685L7.94042 11.3685C7.77334 11.3685 7.61309 11.4349 7.49495 11.5531C7.3768 11.6712 7.31042 11.8314 7.31042 11.9985C7.31042 12.1656 7.3768 12.3259 7.49495 12.444C7.61309 12.5622 7.77334 12.6285 7.94042 12.6285L15.6579 12.6285L12.9547 15.3328C12.8363 15.4512 12.7699 15.6117 12.7699 15.7791C12.7699 15.9464 12.8363 16.107 12.9547 16.2253C13.0731 16.3437 13.2336 16.4102 13.401 16.4102C13.5683 16.4102 13.7288 16.3437 13.8472 16.2253L17.6272 12.4453C17.6859 12.3868 17.7325 12.3172 17.7643 12.2407C17.7961 12.1641 17.8125 12.082 17.8125 11.9991C17.8125 11.9161 17.7961 11.834 17.7643 11.7575C17.7325 11.6809 17.6859 11.6113 17.6272 11.5528L13.8472 7.77281C13.7887 7.71408 13.7191 7.66747 13.6425 7.63568C13.566 7.60388 13.4839 7.58751 13.401 7.58751C13.318 7.58751 13.2359 7.60388 13.1594 7.63568C13.0828 7.66747 13.0132 7.71408 12.9547 7.77281Z" fill="black"/>
+													</svg>
+
+												</a>
+											</div>
+										</div>
+									</div>
+									<div class="row g-lg-0 g-4">
+										<div class="col-md-6 col-lg-3">
+											<div class="card-wrap-feature h-100 d-flex flex-column">
+												<h3 class="fs-40w fw-500 text-white mb-lg-4 mb-3 flex-1">Security
+												</h3>
+												<p class="text-grey fw-500 mb-lg-5 mb-4 fs-20w flex-1">Encryption and access controls to protect sensitive information.</p>
+												<a class="arrow-bottom" href="#">
+
+													<svg width="25" height="24" viewbox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+														<circle cx="12.5625" cy="12" r="12" fill="#2C2C2C"/>
+														<path d="M12.9547 7.77281C12.896 7.83134 12.8494 7.90088 12.8176 7.97746C12.7858 8.05404 12.7694 8.13614 12.7694 8.21906C12.7694 8.30198 12.7858 8.38408 12.8176 8.46065C12.8494 8.53723 12.896 8.60678 12.9547 8.66531L15.6579 11.3685L7.94042 11.3685C7.77334 11.3685 7.61309 11.4349 7.49495 11.5531C7.3768 11.6712 7.31042 11.8314 7.31042 11.9985C7.31042 12.1656 7.3768 12.3259 7.49495 12.444C7.61309 12.5622 7.77334 12.6285 7.94042 12.6285L15.6579 12.6285L12.9547 15.3328C12.8363 15.4512 12.7699 15.6117 12.7699 15.7791C12.7699 15.9464 12.8363 16.107 12.9547 16.2253C13.0731 16.3437 13.2336 16.4102 13.401 16.4102C13.5683 16.4102 13.7288 16.3437 13.8472 16.2253L17.6272 12.4453C17.6859 12.3868 17.7325 12.3172 17.7643 12.2407C17.7961 12.1641 17.8125 12.082 17.8125 11.9991C17.8125 11.9161 17.7961 11.834 17.7643 11.7575C17.7325 11.6809 17.6859 11.6113 17.6272 11.5528L13.8472 7.77281C13.7887 7.71408 13.7191 7.66747 13.6425 7.63568C13.566 7.60388 13.4839 7.58751 13.401 7.58751C13.318 7.58751 13.2359 7.60388 13.1594 7.63568C13.0828 7.66747 13.0132 7.71408 12.9547 7.77281Z" fill="black"/>
+													</svg>
+
+												</a>
+											</div>
+										</div>
+										<div class="col-md-6 col-lg-3">
+											<div class="card-wrap-feature h-100 d-flex flex-column">
+												<h3 class="fs-40w fw-500 text-white mb-lg-4 mb-3 flex-1">Customer
+													<br class="d-lg-block d-none">Support</h3>
+												<p class="text-grey fw-500 mb-lg-5 mb-4 fs-20w flex-1">Customer support provides assistance and resolution to
+													any issues or questions you may have about your digital business card.</p>
+												<a class="arrow-bottom" href="#">
+
+													<svg width="25" height="24" viewbox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+														<circle cx="12.5625" cy="12" r="12" fill="#2C2C2C"/>
+														<path d="M12.9547 7.77281C12.896 7.83134 12.8494 7.90088 12.8176 7.97746C12.7858 8.05404 12.7694 8.13614 12.7694 8.21906C12.7694 8.30198 12.7858 8.38408 12.8176 8.46065C12.8494 8.53723 12.896 8.60678 12.9547 8.66531L15.6579 11.3685L7.94042 11.3685C7.77334 11.3685 7.61309 11.4349 7.49495 11.5531C7.3768 11.6712 7.31042 11.8314 7.31042 11.9985C7.31042 12.1656 7.3768 12.3259 7.49495 12.444C7.61309 12.5622 7.77334 12.6285 7.94042 12.6285L15.6579 12.6285L12.9547 15.3328C12.8363 15.4512 12.7699 15.6117 12.7699 15.7791C12.7699 15.9464 12.8363 16.107 12.9547 16.2253C13.0731 16.3437 13.2336 16.4102 13.401 16.4102C13.5683 16.4102 13.7288 16.3437 13.8472 16.2253L17.6272 12.4453C17.6859 12.3868 17.7325 12.3172 17.7643 12.2407C17.7961 12.1641 17.8125 12.082 17.8125 11.9991C17.8125 11.9161 17.7961 11.834 17.7643 11.7575C17.7325 11.6809 17.6859 11.6113 17.6272 11.5528L13.8472 7.77281C13.7887 7.71408 13.7191 7.66747 13.6425 7.63568C13.566 7.60388 13.4839 7.58751 13.401 7.58751C13.318 7.58751 13.2359 7.60388 13.1594 7.63568C13.0828 7.66747 13.0132 7.71408 12.9547 7.77281Z" fill="black"/>
+													</svg>
+
+												</a>
+											</div>
+										</div>
+									</div>
+								</div>
+
+							</div>
+						</section>
+
+						{# <section class="customer-voices spacing-100 position-relative z-1 bg-white"> #}
+							{# <div class="container">
+								<div class="mx-auto w-md-90">
+									<div class="text-center fs-50w fw-200  mb-lg-4 mb-3">
+										<span class="fw-bold">Customer
+										</span>
+										Voices:
+										<br>
+										<span class="fw-bold">Hear What</span>
+										they Say!
+									</div>
+
+									<div class="voicesspeakersthumb">
+										<div class="avatar-container ">
+											<div class="avatar-wrapper active">
+												<img data-src="/themes/custom/digitalcard/assets/images/feature/user1.png" alt="User" class="avatar img-fluid lazyload">
+											</div>
+											<div class="avatar-wrapper">
+												<img data-src="/themes/custom/digitalcard/assets/images/feature/user2.png" alt="User" class="avatar img-fluid lazyload">
+											</div>
+											<div class="avatar-wrapper">
+												<img data-src="/themes/custom/digitalcard/assets/images/feature/user3.png" alt="User" class="avatar img-fluid lazyload">
+											</div>
+											<div class="avatar-wrapper">
+												<img data-src="/themes/custom/digitalcard/assets/images/feature/user4.png" alt="User" class="avatar img-fluid lazyload">
+											</div>
+											<div class="avatar-wrapper">
+												<img data-src="/themes/custom/digitalcard/assets/images/feature/user5.png" alt="User" class="avatar img-fluid lazyload">
+											</div>
+										</div>
+									</div>
+
+									<div class="avatar-content-items slider-nav">
+
+										<div>
+											<div class="avatar-content text-center mx-auto w-md-70">
+												<div class="quoteimg mb-2">
+													<img data-src="/themes/custom/digitalcard/assets/images/feature/stripe-blue.png" alt="User" class="img-fluid lazyload mx-auto">
+												</div>
+												<p class="mb-1 mt-3 fw-500 fs-25w">Sophia Thompson</p>
+												<p class="mb-1 fw-400 fs-16w text-grey2 text-uppercase">Entrepreneur</p>
+												<div class="gropmessage mt-3 fw-400 fs-20w text-grey3 ps-lg-5 pe-lg-5 text-center pe-3 ps-3">
+													As an entrepreneur, the digital business card has been a game-changer for my networking efforts. It's sleek, eco-friendly, and incredibly convenient. Instead of carrying stacks of paper cards, I can share my contact details with a simple tap or scan. This is the right app for sharing my info and with the photo option its super easy for anyone to grab my information, I couldn’t be happier!
+												</div>
+											</div>
+										</div>
+
+
+										<div>
+											<div class="avatar-content text-center mx-auto w-md-70">
+												<div class="quoteimg mb-2">
+													<img data-src="/themes/custom/digitalcard/assets/images/feature/stripe-blue.png" alt="User" class="img-fluid lazyload mx-auto">
+												</div>
+												<p class="mb-1 mt-3 fw-500 fs-25w"></p>
+												<p class="mb-1 fw-400 fs-16w text-grey2 text-uppercase">Freelancer</p>
+												<div class="gropmessage mt-3 fw-400 fs-20w text-grey3 ps-lg-5 pe-lg-5 text-center pe-3 ps-3">
+													As a freelancer, having a professional yet convenient way to share my contact information with clients is essential, and digitalbusiness-card.com card has been a game-changer for me. Whether I'm attending a virtual event or meeting potential clients in person, having this digital tool in my toolkit makes a strong and lasting impression. I highly recommend it to any freelancer looking to upgrade their networking game.
+												</div>
+											</div>
+										</div>
+
+										<div>
+											<div class="avatar-content text-center mx-auto w-md-70">
+												<div class="quoteimg mb-2">
+													<img data-src="/themes/custom/digitalcard/assets/images/feature/stripe-blue.png" alt="User" class="img-fluid lazyload mx-auto">
+												</div>
+												<p class="mb-1 mt-3 fw-500 fs-25w">test</p>
+												<p class="mb-1 fw-400 fs-16w text-grey2 text-uppercase">Entrepreneur</p>
+												<div class="gropmessage mt-3 fw-400 fs-20w text-grey3 ps-lg-5 pe-lg-5 text-center pe-3 ps-3">
+													As an entrepreneur, networking is crucial, and first impressions count. The digital business card has revolutionized how I connect with potential clients and partners. One of the best features is the ability to update my information in real-time. If I change my phone number or launch a new service, I can instantly reflect that on my card, ensuring my network always has the most current information.
+												</div>
+											</div>
+										</div>
+
+										<div>
+											<div class="avatar-content text-center mx-auto w-md-70">
+												<div class="quoteimg mb-2">
+													<img data-src="/themes/custom/digitalcard/assets/images/feature/stripe-blue.png" alt="User" class="img-fluid lazyload mx-auto">
+												</div>
+												<p class="mb-1 mt-3 fw-500 fs-25w">test</p>
+												<p class="mb-1 fw-400 fs-16w text-grey2 text-uppercase">Business Man</p>
+												<div class="gropmessage mt-3 fw-400 fs-20w text-grey3 ps-lg-5 pe-lg-5 text-center pe-3 ps-3">
+													The convenience is unparalleled—no more fumbling around to find a paper card or worrying about running out at a crucial moment. With just a quick tap or scan, I can share my contact details, social media links, and even my portfolio instantly. It’s a seamless way to connect, and it shows that my business is forward-thinking and tech-savvy. If you’re serious about networking and making lasting connections, I highly recommend digitalbusiness-card.com
+												</div>
+											</div>
+										</div>
+
+										<div>
+											<div class="avatar-content text-center mx-auto w-md-70">
+												<div class="quoteimg mb-2">
+													<img data-src="/themes/custom/digitalcard/assets/images/feature/stripe-blue.png" alt="User" class="img-fluid lazyload mx-auto">
+												</div>
+												<p class="mb-1 mt-3 fw-500 fs-25w">test</p>
+												<p class="mb-1 fw-400 fs-16w text-grey2 text-uppercase">As a real estate agent</p>
+												<div class="gropmessage mt-3 fw-400 fs-20w text-grey3 ps-lg-5 pe-lg-5 text-center pe-3 ps-3">
+													First impressions are everything, and my digital business card has completely transformed how I connect with clients. What I love most is the ability to update my details in real-time—whether it's a new listing, my latest achievements, or contact info. Clients appreciate the convenience too; they can save my details directly to their phones with a tap, making follow-ups much smoother. Highly recommend it for any real estate professional looking to modernize their networking approach!
+												</div>
+											</div>
+										</div>
+
+									</div>
+
+
+								</div>
+							</div> #}
+						{# </section> #}
+
+						<!--footer-->
+						<footer>
+							<div class="footer-top position-relative z-1">
+								<div class="vectoricon position-absolute top-0 end-0 z-n1">
+									<img data-src="/themes/custom/digitalcard/assets/images/vector-home.png" alt="vector-home" class="img-fluid lazyload">
+								</div>
+								<div class="container">
+									<div class="logo-footer mb-lg-4 mb-3">
+										<a href="#">
+											<img class="img-fluid" src="/themes/custom/digitalcard/logo.png" alt="logo">
+										</a>
+									</div>
+									<div class="row g-4">
+										<div class="col-lg-4">
+											<p class="text-white fw-300 fs-16w mb-3 pe-lg-3 ">
+												Stand out from the crowd by simply using our advanced level business card. DigitalBusiness-card.com will ensure that people remember you better.
+											</p>
+											<ul class="list-inline mb-0 mt-3 social-icons">
+												<li class="list-inline-item">
+													<a target="”_blank”" class="btn-icon" href="https://www.facebook.com/businesscardigital">
+														<img data-src="/themes/custom/digitalcard/assets/images/icons/fb.png" alt="icons" class="img-fluid lazyload">
+													</a>
+												</li>
+												<li class="list-inline-item">
+													<a target="”_blank”" class="btn-icon" href="https://www.instagram.com/businesscardigital/">
+														<img data-src="/themes/custom/digitalcard/assets/images/icons/insta.png" alt="icons" class="img-fluid lazyload">
+													</a>
+												</li>
+
+
+											</ul>
+										</div>
+										<div class="col-lg-2 col-6">
+											<a href="https://digitalbusiness-card.com/" class="text-white fw-300 fs-18w mb-3 d-flex">
+												Home
+											</a>
+											<a href="#" class="text-white fw-300 fs-18w mb-3 d-flex">
+												About Us
+											</a>
+											<a href="#" class="text-white fw-300 fs-18w mb-3 d-flex">
+												Features
+											</a>
+											<a href="#" class="text-white fw-300 fs-18w mb-3 d-flex">Pricing</a>
+											<a href="#contact" class="text-white fw-300 fs-18w mb-0 d-flex">Contact Us</a>
+										</div>
+										<div class="col-lg-2 col-6">
+											<a href="#" class="text-white fw-300 fs-18w mb-3 d-flex">
+												FAQs</a>
+											<a href="https://digitalbusiness-card.com/terms" class="text-white fw-300 fs-18w mb-3 d-flex">
+												Privacy Policy
+											</a>
+											<a href="https://digitalbusiness-card.com/terms" class="text-white fw-300 fs-18w mb-3 d-flex">
+												Terms of Service
+											</a>
+										</div>
+										<div class="col-lg-4">
+											<div id="contact" class="getintouch">
+												<p class="fw-semibold fs-20w text-white">Get In Touch</p>
+												{# <form>
+												                      <div class="mb-3 position-relative">
+												                        <div class="form-group position-relative">
+												                          <input type="email" class="form-control black-form"
+												                            placeholder="Enter your email....">
+												                          <div class="position-absolute icon-blackf0rm">
+												                            <img src="/themes/custom/digitalcard/assets/images/icons/email.png"
+												                              alt="mail" class="img-fluid">
+												                          </div>
+												                        </div>
+												                      </div>
+												                      <div class="mb-3 position-relative">
+												                        <div class="form-group position-relative">
+												                          <textarea name="typing"
+												                            class="form-control black-form"
+												                            placeholder="Typing..."></textarea>
+												                          <div class="position-absolute icon-blackf0rm">
+												                            <img src="/themes/custom/digitalcard/assets/images/icons/edit.png" alt="mail"
+												                              class="img-fluid">
+												                          </div>
+												                        </div>
+												                      </div>
+												                      <div class="btn-wrap mt-4">
+												                        <button type="button"
+												                          class="btn btn-primary text-uppercase gap-3">
+												                          Submit
+												                          <img data-src="/themes/custom/digitalcard/assets/images/arrowicon.png"
+												                            alt="arrow"
+												                            class="img-fluid lazyload"></button>
+												                      </div>
+												                    </form> #}
+												{{ drupal_entity('webform', 'contact') }}
+											</div>
+										</div>
+									</div>
+
+								</div>
+							</div>
+							<div class="bottom-footer pb-lg-5 pb-3">
+								<div class="container">
+									<div class="border-top-footer pt-lg-5 pt-3"></div>
+									<div class="d-flex flex-md-row flex-column justify-content-center gap-md-5 gap-3">
+										<div class="iconslist">
+											<a href="tel:33322060" class="d-inline-flex gap-3 fs-16w text-grey3 align-items-start">
+												<img src="/themes/custom/digitalcard/assets/images/icons/call.png" alt="call" class="img-fluid">
+												<span>3332 2060</span>
+											</a>,
+											<a href="tel:33981289" class="d-inline-flex gap-3 fs-16w text-grey3 align-items-start">
+												<img src="/themes/custom/digitalcard/assets/images/icons/call.png" alt="call" class="img-fluid">
+												<span>3398 1289</span>
+											</a>
+										</div>
+										<div class="iconslist">
+											<a href="#" class="d-inline-flex gap-3 fs-16w text-grey3 align-items-start">
+												<img src="/themes/custom/digitalcard/assets/images/icons/mail2.png" alt="call" class="img-fluid">
+												<span>info@digitalbusiness-card.com</span>
+											</a>
+										</div>
+										<div class="iconslist">
+											<a href="#" class="d-inline-flex gap-3 fs-16w text-grey3 align-items-start">
+												<img src="/themes/custom/digitalcard/assets/images/icons/location.png" alt="call" class="img-fluid flex-1">
+												<span>Head Office: Doha - Qatar</span>
+												|
+												<span>Branch Office: Calicut - India</span>
+											</a>
+										</div>
+									</div>
+									<div class="d-flex flex-md-row flex-column justify-content-center gap-md-5">
+										<a target="_blank" href="https://www.fivedesigner.com/" class="d-inline-flex gap-3 fs-16w text-grey3 align-items-start">
+											<span>Developed by Five Designer Technologies</span>
+										</a>
+
+									</div>
+								</div>
+							</div>
+						</footer>
+						<div class="border-ffoter"></div>
+					</div>
+					{{ page_top }}
+    {{ page }}
+					{{ page_bottom }}
+					<script>
+                var url = 'https://wati-integration-prod-service.clare.ai/v2/watiWidget.js?66385';
+                var s = document.createElement('script');
+                s.type = 'text/javascript';
+                s.async = true;
+                s.src = url;
+                var options = {
+                "enabled":true,
+                "chatButtonSetting":{
+                    "backgroundColor":"#04adef",
+                    "ctaText":"Chat with us",
+                    "borderRadius":"25",
+                    "marginLeft": "0",
+                    "marginRight": "20",
+                    "marginBottom": "20",
+                    "ctaIconWATI":false,
+                    "position":"right"
+                },
+                "brandSetting":{
+                    "brandName":"Digital Business Cards",
+                    "brandSubTitle":"undefined",
+                    "brandImg":"https://digitalbusiness-card.com/themes/custom/digitalcard/logo.png",
+                    "welcomeText":"Hi there!\nHow can I help you?",
+                    "messageText":"Hello,%0A",
+                    "backgroundColor":"#04adef",
+                    "ctaText":"Chat with us",
+                    "borderRadius":"25",
+                    "autoShow":false,
+                    "phoneNumber":"97433322060"
+                }
+                };
+                s.onload = function() {
+                    CreateWhatsappChatWidget(options);
+                };
+                var x = document.getElementsByTagName('script')[0];
+                x.parentNode.insertBefore(s, x);
+            </script>
+					<js-bottom-placeholder token="{{ placeholder_token }}"></body>
+				</html>

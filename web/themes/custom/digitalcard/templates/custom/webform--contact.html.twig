@@ -1,0 +1,47 @@
+<form{{attributes}}>
+
+			{{ title_prefix }}
+			{{ element.elements.form_token }}
+			{{ element.elements.form_build_id }}
+			{{ element.elements.form_id }}
+            <div class="mb-3 position-relative">
+			 <div class="form-group position-relative">
+                         {{ element.elements.name}}
+                        </div> </div>
+					
+		<div class="mb-3 position-relative">	
+	 <div class="form-group position-relative">
+                      	{{ element.elements.email}}
+                        </div> </div>
+							<div class="mb-3 position-relative">	
+	 <div class="form-group position-relative">
+                      {{ element.elements.phone}}
+                        </div> </div>
+			
+											<div class="mb-3 position-relative">	
+	 <div class="form-group position-relative">
+                     	{{ element.elements.message}}
+                        </div> </div>
+
+
+					
+                    
+		
+			{{ element.elements.captcha}}
+			
+				{{ element.form_token }}
+				{{ element.form_build_id }}
+				{{ element.form_id }}
+                 <div class="btn-wrap mt-4">
+				{{ element.elements.actions }}
+                  </div>
+				{{ title_suffix }}
+			
+			{% if element.status_messages %}
+			
+				{{ element.status_messages }}
+	
+			{% endif %}
+
+        </div>
+			</form>

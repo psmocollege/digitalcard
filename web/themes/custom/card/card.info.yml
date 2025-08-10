@@ -1,0 +1,22 @@
+name: digitalcard
+type: theme
+base theme: stable9
+description: custom theme by siraj
+package: custom
+core_version_requirement: ^10
+libraries:
+  - card/global
+  - card/global-scripts
+  - card/global-styling
+regions:
+  header: 'Header'
+  primary_menu: 'Primary menu'
+  secondary_menu: 'Secondary menu'
+  page_top: 'Page top'
+  page_bottom: 'Page bottom'
+  featured: 'Featured'
+  breadcrumb: 'Breadcrumb'
+  content: 'Content'
+  sidebar_first: 'Sidebar first'
+  sidebar_second: 'Sidebar second'
+  footer: 'Footer'

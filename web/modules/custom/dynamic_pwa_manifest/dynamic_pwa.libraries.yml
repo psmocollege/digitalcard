@@ -1,0 +1,5 @@
+install_app:
+  js:
+    js/install_app.js: {}
+  dependencies:
+    - core/jquery

@@ -1,0 +1,429 @@
+{#
+/**
+ * @file
+ * Theme override to display a node.
+ *
+ * Available variables:
+ * - node: The node entity with limited access to object properties and methods.
+ *   Only method names starting with "get", "has", or "is" and a few common
+ *   methods such as "id", "label", and "bundle" are available. For example:
+ *   - node.getCreatedTime() will return the node creation timestamp.
+ *   - node.hasField('field_example') returns TRUE if the node bundle includes
+ *     field_example. (This does not indicate the presence of a value in this
+ *     field.)
+ *   - node.isPublished() will return whether the node is published or not.
+ *   Calling other methods, such as node.delete(), will result in an exception.
+ *   See \Drupal\node\Entity\Node for a full list of public properties and
+ *   methods for the node object.
+ * - label: (optional) The title of the node.
+ * - content: All node items. Use {{ content }} to print them all,
+ *   or print a subset such as {{ content.field_example }}. Use
+ *   {{ content|without('field_example') }} to temporarily suppress the printing
+ *   of a given child element.
+ * - author_picture: The node author user entity, rendered using the "compact"
+ *   view mode.
+ * - metadata: Metadata for this node.
+ * - date: (optional) Themed creation date field.
+ * - author_name: (optional) Themed author name field.
+ * - url: Direct URL of the current node.
+ * - display_submitted: Whether submission information should be displayed.
+ * - attributes: HTML attributes for the containing element.
+ *   The attributes.class element may contain one or more of the following
+ *   classes:
+ *   - node: The current template type (also known as a "theming hook").
+ *   - node--type-[type]: The current node type. For example, if the node is an
+ *     "Article" it would result in "node--type-article". Note that the machine
+ *     name will often be in a short form of the human readable label.
+ *   - node--view-mode-[view_mode]: The View Mode of the node; for example, a
+ *     teaser would result in: "node--view-mode-teaser", and
+ *     full: "node--view-mode-full".
+ *   The following are controlled through the node publishing options.
+ *   - node--promoted: Appears on nodes promoted to the front page.
+ *   - node--sticky: Appears on nodes ordered above other non-sticky nodes in
+ *     teaser listings.
+ *   - node--unpublished: Appears on unpublished nodes visible only to site
+ *     admins.
+ * - title_attributes: Same as attributes, except applied to the main title
+ *   tag that appears in the template.
+ * - content_attributes: Same as attributes, except applied to the main
+ *   content tag that appears in the template.
+ * - author_attributes: Same as attributes, except applied to the author of
+ *   the node tag that appears in the template.
+ * - title_prefix: Additional output populated by modules, intended to be
+ *   displayed in front of the main title tag that appears in the template.
+ * - title_suffix: Additional output populated by modules, intended to be
+ *   displayed after the main title tag that appears in the template.
+ * - view_mode: View mode; for example, "teaser" or "full".
+ * - teaser: Flag for the teaser state. Will be true if view_mode is 'teaser'.
+ * - page: Flag for the full page state. Will be true if view_mode is 'full'.
+ * - readmore: Flag for more state. Will be true if the teaser content of the
+ *   node cannot hold the main body content.
+ * - logged_in: Flag for authenticated user status. Will be true when the
+ *   current user is a logged-in member.
+ * - is_admin: Flag for admin user status. Will be true when the current user
+ *   is an administrator.
+ *
+ * @see template_preprocess_node()
+ *
+ */
+#}
+{{ attach_library('digitalcard/card_library') }}
+{%
+  set classes = [
+    'node',
+    'node--type-' ~ node.bundle|clean_class,
+    node.isPromoted() ? 'node--promoted',
+    node.isSticky() ? 'node--sticky',
+    not node.isPublished() ? 'node--unpublished',
+    view_mode ? 'node--view-mode-' ~ view_mode|clean_class,
+  ]
+%}
+{{ attach_library('card/node') }}
+<article{{attributes.addClass(classes)}}>
+
+	{{ title_prefix }}
+	{% if label and not page %}
+		<h2{{title_attributes}}>
+			<a href="{{ url }}" rel="bookmark">{{ label }}</a>
+		</h2>
+	{% endif %}
+	{{ title_suffix }}
+
+	{% if display_submitted %}
+		<footer class="node__meta">
+			{{ author_picture }}
+			<div{{author_attributes.addClass('node__submitted')}}>
+				{% trans %}Submitted by
+				{{ author_name }}
+				on
+				{{ date }}{% endtrans %}
+				{{ metadata }}
+			</div>
+		</footer>
+	{% endif %}
+
+	<div class="main-wrapper">
+
+		{% if node.field_logo is defined and node.field_logo.entity is not empty %}
+			{% set logo_file = node.field_logo.entity %}
+			{% if logo_file and logo_file.fileuri %}
+				<header class="header-wrap py-3">
+					<div class="container">
+						<a href="#" class="d-flex justify-content-center">
+							<img src="{{ file_url(logo_file.fileuri) }}" alt="logo" width="130" height="47" class="img-fluid">
+						</a>
+					</div>
+				</header>
+			{% endif %}
+		{% endif %}
+
+		<div class="prfofile-wrap py-3">
+			<div class="container">
+				<div class="row">
+					<div class="col-7">
+						<h1 class="fw-600 h2 mb-2 lh-2">{{ node.title.value }}</h1>
+						<p class="para">{{ node.field_designation.value}}</p>
+						<ul class="social-icons ul-nopadding d-flex gap-2">
+							{% if node.field_phone is defined and node.field_phone.value is not empty %}
+								<li>
+									<a href="tel:{{ node.field_phone.value }}">
+										<img src="/themes/custom/digitalcard/assets/images/call.png" alt="call" class="img-fluid">
+									</a>
+								</li>
+							{% endif %}
+							{% if node.field_e_mail is defined and node.field_e_mail.value is not empty %}
+								<li>
+									<a href="mailto:{{ node.field_e_mail.value }}">
+										<img src="/themes/custom/digitalcard/assets/images/mail.png" alt="mail" class="img-fluid">
+									</a>
+								</li>
+							{% endif %}
+
+							{% if node.field_whatsapp is defined and node.field_whatsapp.value is not empty %}
+								<li>
+									<a href="https://wa.me/{{ node.field_whatsapp.value }}">
+										<img src="/themes/custom/digitalcard/assets/images/whatsapp.png" alt="WhatsApp" class="img-fluid">
+									</a>
+								</li>
+							{% endif %}
+
+						</ul>
+					</div>
+					{% if node.field_profile_photo is defined and node.field_profile_photo.entity is not empty %}
+						{% set file = node.field_profile_photo.entity %}
+						{% if file.fileuri is defined and file.fileuri is not empty %}
+							<div class="col-5">
+								<div class="profileimg">
+									<img src="{{ file_url(file.fileuri) }}" alt="profile" class="img-fluid">
+								</div>
+							</div>
+						{% endif %}
+					{% endif %}
+				</div>
+			</div>
+		</div>
+
+		<div class="whychosmain pb-4">
+			<div class="container">
+				<div class="whychoosebox">
+					<h2 class="fw-600 h2 mb-2 lh-2">
+						{{ node.field_description_heading.value }}</h2>
+					<p class="para blacktext mb-0">
+						<span class="visible-text">
+							{{ content.field_description }}
+						</span>
+					</p>
+				</div>
+			</div>
+		</div>
+
+		<div class="more-connections pb-4">
+			<div class="container">
+				<div class="text-center">
+					<p class="blacktext2 mb-3 fw-500">More Connections</p>
+					<ul class="social-icons ul-nopadding d-flex gap-2 justify-content-center mb-3">
+						{% if node.field_website.value is defined and node.field_website.value is not empty %}
+							<li>
+								<a href="{{ node.field_website.value }}">
+									<img src="/themes/custom/digitalcard/assets/images/Group-1000001387.png" alt="icons" class="img-fluid">
+								</a>
+							</li>
+						{% endif %}
+
+
+						{% if node.field_linkedin.value is defined and node.field_linkedin.value is not empty %}
+							<li>
+								<a href="{{ node.field_linkedin.value }}">
+									<img src="/themes/custom/digitalcard/assets/images/Group-1000001386.png" alt="icons" class="img-fluid">
+								</a>
+							</li>
+						{% endif %}
+
+						{% if node.field_locaiton_link.value is defined and node.field_locaiton_link.value is not empty %}
+							<li>
+								<a href="{{ node.field_locaiton_link.value }}">
+									<img src="/themes/custom/digitalcard/assets/images/Group-1000001391.png" alt="icons" class="img-fluid">
+								</a>
+							</li>
+						{% endif %}
+
+						<li>
+							<a class="sharethis" href="#" onclick="shareContent(event)">
+								<img src="/themes/custom/digitalcard/assets/images/Group-1000001390.png" alt="icons" class="img-fluid">
+							</a>
+							<script>
+								function shareContent(event) {
+event.preventDefault();
+// Prevent default anchor behavior
+
+// Ensure the Web Share API is supported
+if (navigator.share) {
+navigator.share({title: '{{ node.title.value }}', text: 'View My Card.', url: window.location.href}).then(() => {
+console.log('Thanks for sharing!');
+}).catch((error) => {
+console.log('Error sharing:', error);
+});
+} else { // Fallback for browsers that do not support Web Share API
+alert('Web Share API not supported on this browser.');
+}
+}
+							</script>
+						</li>
+					</ul>
+				<div class="btn-wrap">
+    <a id="download-vcf-btn" href="javascript:void(0);" class="btn btn-primary d-inline-flex justify-content-center align-items-center">
+        <img src="/themes/custom/digitalcard/assets/images/framebtn.png" alt="icon" class="img-fluid">
+        <span>Save Contact</span>
+    </a>
+
+</div>
+{% set facebook_url = node.field_facebook.uri is not empty ? node.field_facebook.uri : '' %}
+{% set twitter_url = node.field_x.uri is not empty ? node.field_x.uri : '' %}
+{% set linkedin_url = node.field_linkedin.uri is not empty ? node.field_linkedin.uri : '' %}
+{% set instagram_url = node.field_instagram.uri is not empty ? node.field_instagram.uri : '' %}
+
+<script>
+    function generateVCard(employeeName, employeeDesig, employeeMobile, emailLink, website, employeeBio, employeePhotoURL, companyName, facebookURL, twitterURL, linkedinURL, instagramURL) {
+        fetch(employeePhotoURL)
+            .then(response => response.blob())
+            .then(blob => {
+                const reader = new FileReader();
+                reader.onloadend = function() {
+                    const photoData = reader.result.split(',')[1];
+                    let vCardData = `BEGIN:VCARD
+VERSION:3.0
+FN:${employeeName}
+ORG:${companyName}
+TITLE:${employeeDesig}
+TEL;TYPE=CELL:${employeeMobile}
+EMAIL;TYPE=WORK:${emailLink}
+URL:${website}
+`;
+
+                    // Conditionally add social media URLs if they exist
+                    if (facebookURL) vCardData += `URL;TYPE=Facebook:${facebookURL}\n`;
+                    if (twitterURL) vCardData += `URL;TYPE=Twitter:${twitterURL}\n`;
+                    if (linkedinURL) vCardData += `URL;TYPE=LinkedIn:${linkedinURL}\n`;
+                    if (instagramURL) vCardData += `URL;TYPE=Instagram:${instagramURL}\n`;
+
+                    vCardData += `NOTE:${employeeBio}
+PHOTO;TYPE=JPEG;ENCODING=b:${photoData}
+END:VCARD`;
+
+                    downloadVCard(employeeName, vCardData);
+                };
+                reader.readAsDataURL(blob);
+            });
+    }
+
+    function downloadVCard(employeeName, vCardData) {
+        const vCardURI = `data:text/vcard;charset=utf-8,${encodeURIComponent(vCardData)}`;
+        const confirmation = confirm(`Do you want to download the vCard for ${employeeName}?`);
+        if (confirmation) {
+            const downloadLink = document.createElement('a');
+            downloadLink.href = vCardURI;
+            downloadLink.download = `${employeeName}.vcf`;
+            downloadLink.style.display = 'none';
+            document.body.appendChild(downloadLink);
+            downloadLink.click();
+            document.body.removeChild(downloadLink);
+        }
+    }
+
+    document.getElementById('download-vcf-btn').addEventListener('click', function() {
+        const employeeName = "{{ node.title.value }}";
+        const employeeDesig = "{{ node.field_designation.value }}";
+        const employeeMobile = "{{ node.field_phone.value }}";
+        const emailLink = "{{ node.field_e_mail.value }}";
+        const website = "{{ node.field_website.value }}";
+        const employeeBio = "{{ node.field_description.value|striptags|e('js') }}";
+        const employeePhotoURL = "{{ node.field_profile_photo.isEmpty ? '' : base_url ~ file_url(node.field_profile_photo.entity.fileuri) }}";
+        const facebookURL = "{{ node.field_facebook.uri|e('js') }}";
+        const twitterURL = "{{ node.field_x.uri|e('js') }}";
+        const linkedinURL = "{{ node.field_linkedin.uri|e('js') }}";
+        const instagramURL = "{{ node.field_instagram.uri|e('js') }}";
+        const companyName = "{{ node.field_company_name.value }}";
+
+        generateVCard(employeeName, employeeDesig, employeeMobile, emailLink, website, employeeBio, employeePhotoURL, companyName, facebookURL, twitterURL, linkedinURL, instagramURL);
+    });
+</script>
+
+
+				</div>
+			</div>
+		</div>
+
+		<div class="qr-codeimage pb-4">
+			<div class="container">
+				<div class="qrcodesec">
+					{{ content.field_qr_code }}
+
+				</div>
+			</div>
+		</div>
+		{% if content.field_images['#items'] | length > 0 %}
+			<div class="slider-appm pb-4">
+				<div class="container">
+					<div id="carouselExample" class="carousel slide" data-bs-ride="carousel">
+						<div class="carousel-inner">
+							{% for image in content.field_images['#items'] %}
+								<div class="carousel-item {{ loop.first ? 'active' : '' }}">
+									<img src="{{ image.entity.uri.value | image_style('large') }}" class="d-block w-100 img-fluid" alt="{{ image.alt }}">
+								</div>
+							{% endfor %}
+						</div>
+						<button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+							<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+							<span class="visually-hidden">Previous</span>
+						</button>
+						<button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+							<span class="carousel-control-next-icon" aria-hidden="true"></span>
+							<span class="visually-hidden">Next</span>
+						</button>
+					</div>
+				</div>
+			</div>
+		{% endif %}
+
+		<div class="freetrail-sec pb-4">
+			<div class="container">
+				<div class="d-flex gap-3 justify-content-center align-items-center mb-3">
+					<div class="lin-f"></div>
+					<div class="testline">free feel connect with</div>
+					<div class="lin-f"></div>
+				</div>
+				<ul class="social-icons ul-nopadding d-flex gap-2 justify-content-center mb-3">
+					{% if node.field_instagram.value is defined and node.field_instagram.value is not empty %}
+						<li>
+							<a target="_blank" href="{{ node.field_instagram.value }}">
+								<img src="/themes/custom/digitalcard/assets/images/instagram.png" width="24" height="24" alt="Instagram" class="img-fluid">
+							</a>
+						</li>
+					{% endif %}
+
+					{% if node.field_facebook.value is defined and node.field_facebook.value is not empty %}
+						<li>
+							<a target="_blank" href="{{ node.field_facebook.value }}">
+								<img src="/themes/custom/digitalcard/assets/images/fb.png" width="24" height="24" alt="Facebook" class="img-fluid">
+							</a>
+						</li>
+					{% endif %}
+
+					{% if node.field_x.value is defined and node.field_x.value is not empty %}
+						<li>
+							<a target="_blank" href="{{ node.field_x.value }}">
+								<img src="/themes/custom/digitalcard/assets/images/X.png" width="24" height="24" alt="Twitter" class="img-fluid">
+							</a>
+						</li>
+					{% endif %}
+					{% if node.field_yalla.value is defined and node.field_yalla.value is not empty %}
+						<li>
+							<a target="_blank" href="{{ node.field_yalla.value }}">
+								<img src="/themes/custom/digitalcard/assets/images/yalla.png" width="24" height="24" alt="Yalla" class="img-fluid">
+							</a>
+						</li>
+					{% endif %}
+					{% if node.field_tiktok.value is defined and node.field_tiktok.value is not empty %}
+						<li>
+							<a target="_blank" href="{{ node.field_tiktok.value }}">
+								<img src="/themes/custom/digitalcard/assets/images/tiktok.png" width="24" height="24" alt="tiktok" class="img-fluid">
+							</a>
+						</li>
+					{% endif %}
+					{% if node.field_snapchat.value is defined and node.field_snapchat.value is not empty %}
+						<li>
+							<a target="_blank" href="{{ node.field_snapchat.value }}">
+								<img src="/themes/custom/digitalcard/assets/images/snapchat.png" width="24" height="24" alt="snapchat" class="img-fluid">
+							</a>
+						</li>
+					{% endif %}
+					{% if node.field_pinterest.value is defined and node.field_pinterest.value is not empty %}
+						<li>
+							<a target="_blank" href="{{ node.field_pinterest.value }}">
+								<img src="/themes/custom/digitalcard/assets/images/pinterest.png" width="24" height="24" alt="pinterest" class="img-fluid">
+							</a>
+						</li>
+					{% endif %}
+
+					{% if node.field_youtube.value is defined and node.field_youtube.value is not empty %}
+						<li>
+							<a target="_blank" href="{{ node.field_youtube.value }}">
+								<img src="/themes/custom/digitalcard/assets/images/youtube.png" width="24" height="24" alt="pinterest" class="img-fluid">
+							</a>
+						</li>
+					{% endif %}
+				</ul>
+				<div class="lastpara text-center">
+					<div class="testline">Powered by:
+						<a href="https://www.fivedesigner.com/" class="fw-600">Five designer Technologies</a>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+
+</article>
+{# {% if node.bundle() == 'digitalcards' %}
+  <button id="install-app">Install App</button>
+{% endif %} #}

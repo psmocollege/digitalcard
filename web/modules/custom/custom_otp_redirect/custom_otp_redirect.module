@@ -1,0 +1,21 @@
+<?php
+
+use Drupal\Core\Form\FormStateInterface;
+
+/**
+ * Implements hook_form_alter().
+ */
+function custom_otp_redirect_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  if ($form_id == 'otp_verify_form') {
+    // Replace the submit handler with our custom one.
+    $form['#submit'][] = 'custom_otp_redirect_otp_verify_form_submit';
+  }
+}
+
+/**
+ * Custom submit handler for OTP verification form.
+ */
+function custom_otp_redirect_otp_verify_form_submit(array &$form, FormStateInterface $form_state) {
+  // Redirect to node/add/digitalcards after successful OTP verification.
+  $form_state->setRedirectUrl(\Drupal\Core\Url::fromUri('internal:/node/add/digitalcards'));
+}

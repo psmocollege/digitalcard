@@ -1,0 +1,7 @@
+dynamic_pwa_manifest.manifest:
+  path: '/manifest.json'
+  defaults:
+    _controller: '\Drupal\dynamic_pwa_manifest\Controller\ManifestController::manifest'
+    _title: 'Manifest'
+  requirements:
+    _permission: 'access content'

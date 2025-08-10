@@ -1,0 +1,62 @@
+# Main theme library.
+global:
+  js:
+    js/digitalcard.js: {}
+  css:
+    base:
+      css/base/elements.css: {}
+    component:
+      css/component/block.css: {}
+      css/component/breadcrumb.css: {}
+      css/component/field.css: {}
+      css/component/form.css: {}
+      css/component/header.css: {}
+      css/component/menu.css: {}
+      css/component/messages.css: {}
+      css/component/node.css: {}
+      css/component/sidebar.css: {}
+      css/component/table.css: {}
+      css/component/tabs.css: {}
+      css/component/buttons.css: {}
+    layout:
+      css/layout/layout.css: {}
+    theme:
+      css/theme/print.css: { media: print }
+
+card_library:
+  version: 1.x
+  css:
+    theme:
+      assets/css/bootstrap.css: {}
+      assets/css/app.css: {}
+      # Preload fonts
+      'https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap': { type: external, minified: true, attributes: { rel: preload, as: style, onload: "this.onload=null;this.rel='stylesheet'" } }
+  js:
+    assets/js/bootstrap.js: {}
+  dependencies:
+    - core/jquery
+
+custom_library:
+  css:
+    theme:
+      assets/css/bootstrap.css: {}
+      assets/css/slick.css: {}
+      assets/css/landing.css: {}
+  js:
+    assets/js/bootstrap.js: {}
+    assets/js/lazyload.js: {}
+    assets/js/slick.js: {}
+    assets/js/landing.js: {}
+  dependencies:
+    - core/jquery
+
+user:
+  css:
+    theme:
+      css/user.css: {}
+
+  dependencies:
+    - core/jquery
+
+
+
