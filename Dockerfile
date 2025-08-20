@@ -31,12 +31,22 @@ COPY . /var/www/html
 # Run composer install
 RUN composer install --no-dev --prefer-dist --optimize-autoloader
 
-# Set the correct permissions
-RUN chown -R www-data:www-data /var/www/html
-RUN find /var/www/html -type d -exec chmod 755 {} \;
-RUN find /var/www/html -type f -exec chmod 644 {} \;
+# --- PERMISSIONS HAVE MOVED ---
+# The chown and chmod commands are removed from here.
 
 # Configure Apache
 RUN rm /etc/apache2/sites-enabled/000-default.conf
 COPY ./docker/apache/drupal.conf /etc/apache2/sites-available/drupal.conf
 RUN a2ensite drupal.conf && a2enmod rewrite
+
+# ---- ADD THE ENTRYPOINT SCRIPT ----
+# Copy the entrypoint script into the container
+COPY docker-entrypoint.sh /usr/local/bin/
+# Make the script executable
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+
+# Set the entrypoint
+ENTRYPOINT ["docker-entrypoint.sh"]
+
+# The default command to run when the container starts
+CMD ["apache2-foreground"]
